@@ -5,11 +5,12 @@ import os.path
 # Also displays the list of .png files in that folder
 file_list_column = [
     [
-        sg.Text("Desired Flight File")
+        sg.Text("Desired Flight Plan"),
+        sg.Button("Send to Drone")
     ],
     [
         sg.Listbox(
-            values=[], enable_events=True, size=(40,20), key="-FILE LIST"
+            values=[], enable_events=True, size=(40,20), key="-FILE LIST-"
         )
     ],
 ]
@@ -39,26 +40,8 @@ while True:
     if event == "Exit" or event == sg.WIN_CLOSED:
         break
 
-# Checks the folder name that was filled in and 
-# lists all the .png files within
-if event == "-FOLDER-":
-    folder = values["-FOLDER-"]
-    try:
-        # List of files within the folder
-        file_list = os.listdir(folder)
-    except:
-        file_list = []
-
-    fnames = [
-        f
-        for f in file_list
-        if os.path.isfile(os.path.join(folder,f))
-        and f.lower().endswith((".png", ".gif"))
-    ]
-    window["-FILE LIST-"].update(fnames)
-
 # File was instead chosen from the listbox
-elif event == "-FILE LIST-":
+if event == "-FILE LIST-":
     try:
         filename = os.path.join(
             values["-FOLDER-"], values["-FILE LIST-"][0]
