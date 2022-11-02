@@ -5,9 +5,7 @@ import os.path
 # Also displays the list of .png files in that folder
 file_list_column = [
     [
-        sg.Text("Desired Flight File"),
-        sg.In(size=(25,1), enable_events=True, key="-FOLDER-"),
-        sg.FolderBrowse(),
+        sg.Text("Desired Flight File")
     ],
     [
         sg.Listbox(
@@ -19,7 +17,7 @@ file_list_column = [
 # Right side of the GUI allows to view the .png selected 
 # from the left side
 image_viewer_column = [
-    [sg.Text("Choose a flight path from list on left:")],
+    [sg.Text("Chosen flight path visualization:")],
     [sg.Text(size=(40, 1), key="-TOUT-")],
     [sg.Image(key="-IMAGE-")],
 ]
