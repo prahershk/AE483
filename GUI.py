@@ -5,7 +5,7 @@ import os.path
 # Also displays the list of .png files in that folder
 file_list_column = [
     [
-        sg.Text("Flight List"),
+        sg.Text("Desired Flight File"),
         sg.In(size=(25,1), enable_events=True, key="-FOLDER-"),
         sg.FolderBrowse(),
     ],
@@ -33,7 +33,7 @@ layout = [
     ]
 ]
 
-window = sg.Window("Demo", layout)
+window = sg.Window("Search & Rescue Flight Paths", layout)
 
 # Will close the program if exited at any point
 while True:
