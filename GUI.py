@@ -6,11 +6,11 @@ import os.path
 file_list_column = [
     [
         sg.Text("Desired Flight Plan"),
-        sg.Button("Send to Drone")
+        sg.Button('Display')
     ],
     [
         sg.Listbox(
-            values=[], enable_events=True, size=(40,20), key="-FILE LIST-"
+            values=['This'], enable_events=True, size=(40,20), key="-FILE LIST-"
         )
     ],
 ]
@@ -18,9 +18,9 @@ file_list_column = [
 # Right side of the GUI allows to view the .png selected 
 # from the left side
 image_viewer_column = [
-    [sg.Text("Chosen flight path visualization:")],
-    [sg.Text(size=(40, 1), key="-TOUT-")],
+    [sg.Text("Chosen flight path visualization:"), sg.Text(size=(40, 1), key="-TOUT-")],
     [sg.Image(key="-IMAGE-")],
+    [sg.Button('Send to Drone')]
 ]
 
 # Sets the general layout of the GUI
@@ -40,15 +40,18 @@ while True:
     if event == "Exit" or event == sg.WIN_CLOSED:
         break
 
-# File was instead chosen from the listbox
-if event == "-FILE LIST-":
-    try:
-        filename = os.path.join(
-            values["-FOLDER-"], values["-FILE LIST-"][0]
-        )
-        window["-TOUT-"].update(filename)
-        window["-IMAGE-"].update(filename=filename)
-    except:
-        pass
+    if event == 'Display':
+        window["-TOUT-"].update(values['-FILE LIST-'])
+
+    # File was instead chosen from the listbox
+    if event == "-FILE LIST-":
+        try:
+            filename = os.path.join(
+                values["-FOLDER-"], values["-FILE LIST-"][0]
+            )
+            window["-TOUT-"].update(filename)
+            window["-IMAGE-"].update(filename=filename)
+        except:
+            pass
 
 window.close()
