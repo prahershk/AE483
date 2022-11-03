@@ -5,21 +5,28 @@ import os.path
 # Also displays the list of .png files in that folder
 file_list_column = [
     [
-        sg.Text("Desired Flight Plan"),
-        sg.Button('Display')
+        sg.Text("Desired Flight Plan")
     ],
     [
         sg.Listbox(
-            values=['This'], enable_events=True, size=(40,20), key="-FILE LIST-"
+            values=['Lawnmower.py'], enable_events=True, size=(40,20), key="-FILE LIST-"
         )
     ],
+    [sg.Button('Display')]
 ]
 
 # Right side of the GUI allows to view the .png selected 
 # from the left side
 image_viewer_column = [
-    [sg.Text("Chosen flight path visualization:"), sg.Text(size=(40, 1), key="-TOUT-")],
+    [
+        sg.Text("Chosen flight path visualization:"),
+        sg.Text(size=(40, 1), key="-TOUT-")
+    ],
     [sg.Image(key="-IMAGE-")],
+    [
+        sg.Text('Enter speed here (m/s):'),
+        sg.Input(key='-IN-', size=(10,1))
+    ],
     [sg.Button('Send to Drone')]
 ]
 
@@ -28,7 +35,7 @@ layout = [
     [
         sg.Column(file_list_column),
         sg.VSeparator(),
-        sg.Column(image_viewer_column),
+        sg.Column(image_viewer_column)
     ]
 ]
 
