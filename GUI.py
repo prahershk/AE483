@@ -1,5 +1,9 @@
 import PySimpleGUI as sg
 import os.path
+import csv
+
+# Theme
+sg.theme('DarkAmber')
 
 # Left side of GUI to create a search bar for the file
 # Also displays the list of .png files in that folder
@@ -9,7 +13,10 @@ file_list_column = [
     ],
     [
         sg.Listbox(
-            values=['Lawnmower.py'], enable_events=True, size=(40,20), key="-FILE LIST-"
+            values=['Lawnmower.png', 'SAR.png'], 
+            enable_events=True, 
+            size=(40,20), 
+            key="-FILE LIST-"
         )
     ],
     [sg.Button('Display')]
@@ -25,7 +32,7 @@ image_viewer_column = [
     [sg.Image(key="-IMAGE-")],
     [
         sg.Text('Enter speed here (m/s):'),
-        sg.Input(key='-IN-', size=(10,1))
+        sg.Input(key='-IN-', size=(5,1), do_not_clear=False)
     ],
     [sg.Button('Send to Drone')]
 ]
@@ -41,7 +48,7 @@ layout = [
 
 window = sg.Window("Search & Rescue Flight Paths", layout)
 
-# Will close the program if exited at any point
+# Processing User Input
 while True:
     event, values = window.read()
     if event == "Exit" or event == sg.WIN_CLOSED:
@@ -50,15 +57,28 @@ while True:
     if event == 'Display':
         window["-TOUT-"].update(values['-FILE LIST-'])
 
-    # File was instead chosen from the listbox
-    if event == "-FILE LIST-":
-        try:
-            filename = os.path.join(
-                values["-FOLDER-"], values["-FILE LIST-"][0]
-            )
-            window["-TOUT-"].update(filename)
-            window["-IMAGE-"].update(filename=filename)
-        except:
-            pass
+    if event == 'Send to Drone':
+        # Takes data from the input and creates CSV file
+        # Only occurs when button is pressed
+        header = ['Flight Speed']
+        data = [values['-IN-']]
+
+        with open('test_data', 'w', encoding='UTF8', newline='') as f:
+            writer = csv.writer(f)
+            writer.writerow(header)
+            writer.writerow(data)
+
+        window["-TOUT-"].update('SENT')
+
+    # # File was instead chosen from the listbox
+    # if event == "-FILE LIST-":
+    #     try:
+    #         filename = os.path.join(
+    #             values["-FOLDER-"], values["-FILE LIST-"][0]
+    #         )
+    #         window["-TOUT-"].update(filename)
+    #         window["-IMAGE-"].update(filename=filename)
+    #     except:
+    #         pass
 
 window.close()
