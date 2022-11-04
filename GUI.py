@@ -27,14 +27,23 @@ file_list_column = [
 image_viewer_column = [
     [
         sg.Text("Chosen flight path visualization:"),
-        sg.Text(size=(40, 1), key="-TOUT-")
+        sg.Text(size=(40,1), key='-PATH-')
     ],
     [sg.Image(key="-IMAGE-")],
     [
-        sg.Text('Enter speed here (m/s):'),
-        sg.Input(key='-IN-', size=(5,1), do_not_clear=False)
+        sg.Text('Drone Speed (m/s):'),
+        sg.Input(key='-SPEED-', size=(5,1), do_not_clear=False)
     ],
-    [sg.Button('Send to Drone')]
+    [
+        sg.Text('X-limit (meters):'),
+        sg.Input(key='-XLIM-', size=(5,1), do_not_clear=False),
+        sg.Text('Y-limit (meters):'),
+        sg.Input(key='-YLIM-', size=(5,1), do_not_clear=False)
+    ],
+    [
+        sg.Button('Send to Drone'),
+        sg.Text(size=(40, 1), key="-TOUT-")
+    ]
 ]
 
 # Sets the general layout of the GUI
@@ -55,13 +64,33 @@ while True:
         break
 
     if event == 'Display':
-        window["-TOUT-"].update(values['-FILE LIST-'])
+        try:
+            window["-PATH-"].update(values['-FILE LIST-'])
+            # window["-IMAGE-"].update(values['-FILE LIST-'])
+        except:
+            pass
 
     if event == 'Send to Drone':
         # Takes data from the input and creates CSV file
         # Only occurs when button is pressed
-        header = ['Flight Speed']
-        data = [values['-IN-']]
+
+        # Limit corrections if over/under bounds
+        lower = 0.1
+        upper = 2.0
+        if float(values['-SPEED-']) <= lower:
+            values['-SPEED-'] = lower
+        
+        if float(values['-SPEED-']) >= upper:
+            values['-SPEED-'] = upper
+
+        if values['-XLIM-'] == '':
+            values['-XLIM-'] = 0.0
+
+        if values['-YLIM-'] == '':
+            values['-YLIM-'] = 0.0
+
+        header = ['Speed', 'X Dimension', 'Y Dimension']
+        data = [float(values['-SPEED-']), float(values['-XLIM-']), float(values['-YLIM-'])]
 
         with open('test_data', 'w', encoding='UTF8', newline='') as f:
             writer = csv.writer(f)
@@ -69,16 +98,5 @@ while True:
             writer.writerow(data)
 
         window["-TOUT-"].update('SENT')
-
-    # # File was instead chosen from the listbox
-    # if event == "-FILE LIST-":
-    #     try:
-    #         filename = os.path.join(
-    #             values["-FOLDER-"], values["-FILE LIST-"][0]
-    #         )
-    #         window["-TOUT-"].update(filename)
-    #         window["-IMAGE-"].update(filename=filename)
-    #     except:
-    #         pass
 
 window.close()
