@@ -3,7 +3,7 @@ import os.path
 import csv
 
 # Theme
-sg.theme('DarkAmber')
+sg.theme('Kayak')
 
 # Left side of GUI to create a search bar for the file
 # Also displays the list of .png files in that folder
