@@ -1,5 +1,7 @@
 import PySimpleGUI as sg
-import os.path
+import os
+import io
+from PIL import Image
 import csv
 
 # Theme
@@ -66,7 +68,7 @@ while True:
     if event == 'Display':
         try:
             window["-PATH-"].update(values['-FILE LIST-'])
-            # window["-IMAGE-"].update(values['-FILE LIST-'])
+            # window["-IMAGE-"].update(data=bio.getvalue)
         except:
             pass
 
@@ -88,7 +90,7 @@ while True:
 
         if values['-YLIM-'] == '':
             values['-YLIM-'] = 0.0
-
+        
         header = ['Speed', 'X Dimension', 'Y Dimension']
         data = [float(values['-SPEED-']), float(values['-XLIM-']), float(values['-YLIM-'])]
 
