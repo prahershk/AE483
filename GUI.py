@@ -1,8 +1,6 @@
 import PySimpleGUI as sg
-import os
-import io
-from PIL import Image
 import csv
+import matplotlib.pyplot as plt
 
 # Theme
 sg.theme('Kayak')
@@ -15,7 +13,10 @@ file_list_column = [
     ],
     [
         sg.Listbox(
-            values=['Lawnmower.png', 'SAR.png'], 
+            values=[
+                'Lawnmower.png', 
+                'SAR.png'
+            ], 
             enable_events=True, 
             size=(40,20), 
             key="-FILE LIST-"
@@ -31,20 +32,24 @@ image_viewer_column = [
         sg.Text("Chosen flight path visualization:"),
         sg.Text(size=(40,1), key='-PATH-')
     ],
-    [sg.Image(key="-IMAGE-")],
+    [sg.Image(key="-IMAGE-", size=(246,164))],
     [
         sg.Text('Drone Speed (m/s):'),
         sg.Input(key='-SPEED-', size=(5,1), do_not_clear=False)
     ],
     [
-        sg.Text('X-limit (meters):'),
+        sg.Text('X-limit (m):'),
         sg.Input(key='-XLIM-', size=(5,1), do_not_clear=False),
-        sg.Text('Y-limit (meters):'),
+        sg.Text('Y-limit (m):'),
         sg.Input(key='-YLIM-', size=(5,1), do_not_clear=False)
     ],
     [
         sg.Button('Send to Drone'),
         sg.Text(size=(40, 1), key="-TOUT-")
+    ],
+    [
+        sg.Button('Fly Drone'),
+        sg.Text(size=(40, 1), key="-FLY-")
     ]
 ]
 
@@ -67,8 +72,11 @@ while True:
 
     if event == 'Display':
         try:
+            if values['-FILE LIST-'] == ['Lawnmower.png']:
+                filename = '/Users/zujjainwala/Desktop/TestImage.png'
+
             window["-PATH-"].update(values['-FILE LIST-'])
-            # window["-IMAGE-"].update(data=bio.getvalue)
+            window['-IMAGE-'].update(filename=filename)
         except:
             pass
 
@@ -91,8 +99,10 @@ while True:
         if values['-YLIM-'] == '':
             values['-YLIM-'] = 0.0
         
-        header = ['Speed', 'X Dimension', 'Y Dimension']
-        data = [float(values['-SPEED-']), float(values['-XLIM-']), float(values['-YLIM-'])]
+        header = ['Speed', 'X Dimension', 'Y Dimension', 'Flight Pattern']
+        data = [float(values['-SPEED-']), float(values['-XLIM-']), float(values['-YLIM-']), values['-FILE LIST-']]
+        # header = ['Speed', 'Flight Pattern']
+        # data = [float(values['-SPEED-']), values['-FILE LIST-']]
 
         with open('test_data', 'w', encoding='UTF8', newline='') as f:
             writer = csv.writer(f)
@@ -100,5 +110,11 @@ while True:
             writer.writerow(data)
 
         window["-TOUT-"].update('SENT')
+
+    if event == 'Fly Drone':
+        x = [1, 2, 3]
+        y = [2, 4, 1]
+        plt.plot(x,y)
+        plt.show()
 
 window.close()
