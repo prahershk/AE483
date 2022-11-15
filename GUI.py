@@ -14,8 +14,10 @@ file_list_column = [
     [
         sg.Listbox(
             values=[
-                'Lawnmower.png', 
-                'SAR.png'
+                'Square Pattern Single-Unit', 
+                'Parallel Single-Unit Spiral',
+                'Sector Pattern Single-Unit',
+                'Negativo'
             ], 
             enable_events=True, 
             size=(40,20), 
@@ -72,13 +74,17 @@ while True:
 
     if event == 'Display':
         try:
-            if values['-FILE LIST-'] == ['Lawnmower.png']:
-                filename = '/Users/zujjainwala/Desktop/TestImage.png'
+            if values['-FILE LIST-'] == ['Square Pattern Single-Unit']:
+                filename = '/Users/zujjainwala/Desktop/Square.png'
+            elif values['-FILE LIST-'] == ['Parallel Single-Unit Spiral']:
+                filename = '/Users/zujjainwala/Desktop/Spiral.png'
+            elif values['-FILE LIST-'] == ['Sector Pattern Single-Unit']:
+                filename = '/Users/zujjainwala/Desktop/Sector.png'
 
             window["-PATH-"].update(values['-FILE LIST-'])
             window['-IMAGE-'].update(filename=filename)
         except:
-            pass
+            window["-PATH-"].update("That shit don't exist!!")
 
     if event == 'Send to Drone':
         # Takes data from the input and creates CSV file
@@ -101,8 +107,6 @@ while True:
         
         header = ['Speed', 'X Dimension', 'Y Dimension', 'Flight Pattern']
         data = [float(values['-SPEED-']), float(values['-XLIM-']), float(values['-YLIM-']), values['-FILE LIST-']]
-        # header = ['Speed', 'Flight Pattern']
-        # data = [float(values['-SPEED-']), values['-FILE LIST-']]
 
         with open('test_data', 'w', encoding='UTF8', newline='') as f:
             writer = csv.writer(f)
@@ -112,6 +116,7 @@ while True:
         window["-TOUT-"].update('SENT')
 
     if event == 'Fly Drone':
+        # pass
         x = [1, 2, 3]
         y = [2, 4, 1]
         plt.plot(x,y)
