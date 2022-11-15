@@ -1,12 +1,14 @@
 import PySimpleGUI as sg
 import csv
 import matplotlib.pyplot as plt
+import random
 
 # Theme
-sg.theme('Kayak')
+theme_name_list = sg.theme_list()
+random_theme = random.choice(theme_name_list)
+sg.theme(random_theme)
 
-# Left side of GUI to create a search bar for the file
-# Also displays the list of .png files in that folder
+# Left side of GUI to display the list of Search Patterns
 file_list_column = [
     [
         sg.Text("Desired Flight Plan")
@@ -72,6 +74,7 @@ while True:
     if event == "Exit" or event == sg.WIN_CLOSED:
         break
 
+    # Displays the flight pattern that is selected in the window
     if event == 'Display':
         try:
             if values['-FILE LIST-'] == ['Square Pattern Single-Unit']:
@@ -105,6 +108,7 @@ while True:
         if values['-YLIM-'] == '':
             values['-YLIM-'] = 0.0
         
+        # Header/data written to the CSV file
         header = ['Speed', 'X Dimension', 'Y Dimension', 'Flight Pattern']
         data = [float(values['-SPEED-']), float(values['-XLIM-']), float(values['-YLIM-']), values['-FILE LIST-']]
 
