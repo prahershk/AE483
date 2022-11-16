@@ -16,13 +16,13 @@ file_list_column = [
     [
         sg.Listbox(
             values=[
-                'Square Pattern Single-Unit', 
+                'Square Pattern Single-Unit',
                 'Parallel Single-Unit Spiral',
                 'Sector Pattern Single-Unit',
                 'Negativo'
-            ], 
-            enable_events=True, 
-            size=(40,20), 
+            ],
+            enable_events=True,
+            size=(40,20),
             key="-FILE LIST-"
         )
     ],
@@ -120,10 +120,9 @@ while True:
         window["-TOUT-"].update('SENT')
 
     if event == 'Fly Drone':
-        # pass
-        x = [1, 2, 3]
-        y = [2, 4, 1]
-        plt.plot(x,y)
-        plt.show()
+        pass
+        # file = 'testFile.py'
+        # with open(file) as infile:
+        #     exec(infile.read())
 
 window.close()
