@@ -356,11 +356,10 @@ void controllerAE483(control_t *control,
     } else {
       // Otherwise, motor power commands should be
       // chosen by the controller
-
-      tau_x = 0.00141421f * (o_y - o_y_des) -0.00555862f * phi + 0.00145006f * v_y -0.00108379f * w_x;
-      tau_y = -0.00141421f * (o_x - o_x_des) -0.00461078f * theta -0.00135255f * v_x -0.00079774f * w_y;
-      tau_z = -0.00100000f * psi -0.00074738f * w_z;
-      f_z = -0.31622777f * (o_z - o_z_des) -0.17261477f * v_z + 0.30705300f;
+      tau_x = 0.00070711f * (o_y - o_y_des) -0.00539130f * phi + 0.00133312f * v_y -0.00108137f * w_x;
+      tau_y = -0.00070711f * (o_x - o_x_des) -0.00537977f * theta -0.00133250f * v_x -0.00107664f * w_y;
+      tau_z = -0.00100000f * psi -0.00102887f * w_z;
+      f_z = -0.31622777f * (o_z - o_z_des) -0.17838082f * v_z + 0.33844500f;
       
       // FIXMEs
       m_1 = limitUint16( -4144218.8f * tau_x -4144218.8f * tau_y -56818181.8f * tau_z + 131578.9f * f_z );
@@ -444,4 +443,3 @@ PARAM_GROUP_START(ae483par)
 PARAM_ADD(PARAM_UINT8,     use_observer,            &use_observer)
 PARAM_ADD(PARAM_UINT8,     reset_observer,          &reset_observer)
 PARAM_GROUP_STOP(ae483par)
-
