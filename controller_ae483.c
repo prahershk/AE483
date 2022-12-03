@@ -5,6 +5,8 @@
 #include "param.h"
 #include "num.h"
 #include "math3d.h"
+#include <math.h>
+
 
 // Sensor measurements
 // - tof (from the z ranger on the flow deck)
@@ -92,15 +94,25 @@ static float z7 = 0.0f;
 static float d7 = 0.0f;
 
 // Constants
-// static float k_flow = 4.09255568f;
+static float k_flow = 4.09255568f;
 static float g = 9.81f;
 static float dt = 0.002f;
-// static float o_z_eq = 0.5f; // FIXME: replace with your choice of equilibrium height
+static float o_x_eq = 0.0f;
+static float o_y_eq = 0.0f;
+static float o_z_eq = 0.5f; // FIXME: replace with your choice of equilibrium height
 
 // Measurement errors
-// static float n_x_err = 0.0f;
-// static float n_y_err = 0.0f;
-// static float r_err = 0.0f;
+static float Y_0 = 0.0f;
+static float Y_1 = 0.0f;
+static float Y_2 = 0.0f;
+static float Y_3 = 0.0f;
+static float Y_4 = 0.0f;
+static float Y_5 = 0.0f;
+static float Y_6 = 0.0f;
+static float Y_7 = 0.0f;
+static float Y_8 = 0.0f;
+static float Y_9 = 0.0f;
+static float Y_10 = 0.0f;
 
 
 void ae483UpdateWithTOF(tofMeasurement_t *tof)
@@ -299,20 +311,31 @@ void controllerAE483(control_t *control,
       //   C x + D u - y
       // 
       // FIXME: your code goes here
+      Y_0 = (o_x*(o_x_eq - x0))/sqrt((o_x_eq - x0)*(o_x_eq - x0) + (o_y_eq - y_0)*(o_y_eq - y_0) + (o_z_eq - z0)*(o_z_eq - z0)) + (o_y*(o_y_eq - y_0))/sqrt((o_x_eq - x0)*(o_x_eq - x0) + (o_y_eq - y_0)*(o_y_eq - y_0) + (o_z_eq - z0)*(o_z_eq - z0)) + (o_z*(o_z_eq - z0))/sqrt((o_x_eq - x0)*(o_x_eq - x0) + (o_y_eq - y_0)*(o_y_eq - y_0) + (o_z_eq - z0)*(o_z_eq - z0)) - d0 + sqrt((o_x_eq - x0)*(o_x_eq - x0) + (o_y_eq -  y_0)*(o_y_eq - y_0) + (o_z_eq - z0)*(o_z_eq - z0));
+      Y_1 = (o_x*(o_x_eq - x1))/sqrt((o_x_eq - x1)*(o_x_eq - x1) + (o_y_eq - y_1)*(o_y_eq - y_1) + (o_z_eq - z1)*(o_z_eq - z1)) + (o_y*(o_y_eq - y_1))/sqrt((o_x_eq - x1)*(o_x_eq - x1) + (o_y_eq - y_1)*(o_y_eq - y_1) + (o_z_eq - z1)*(o_z_eq - z1)) + (o_z*(o_z_eq - z1))/sqrt((o_x_eq - x1)*(o_x_eq - x1) + (o_y_eq - y_1)*(o_y_eq - y_1) + (o_z_eq - z1)*(o_z_eq - z1)) - d1 + sqrt((o_x_eq - x1)*(o_x_eq - x1) + (o_y_eq -  y_1)*(o_y_eq - y_1) + (o_z_eq - z1)*(o_z_eq - z1));
+      Y_2 = (o_x*(o_x_eq - x2))/sqrt((o_x_eq - x2)*(o_x_eq - x2) + (o_y_eq - y2)*(o_y_eq - y2) + (o_z_eq - z2)*(o_z_eq - z2)) + (o_y*(o_y_eq - y2))/sqrt((o_x_eq - x2)*(o_x_eq - x2) + (o_y_eq - y2)*(o_y_eq - y2) + (o_z_eq - z2)*(o_z_eq - z2)) + (o_z*(o_z_eq - z2))/sqrt((o_x_eq - x2)*(o_x_eq - x2) + (o_y_eq - y2)*(o_y_eq - y2) + (o_z_eq - z2)*(o_z_eq - z2)) - d2 + sqrt((o_x_eq - x2)*(o_x_eq - x2) + (o_y_eq -  y2)*(o_y_eq - y2) + (o_z_eq - z2)*(o_z_eq - z2));
+      Y_3 = (o_x*(o_x_eq - x3))/sqrt((o_x_eq - x3)*(o_x_eq - x3) + (o_y_eq - y3)*(o_y_eq - y3) + (o_z_eq - z3)*(o_z_eq - z3)) + (o_y*(o_y_eq - y3))/sqrt((o_x_eq - x3)*(o_x_eq - x3) + (o_y_eq - y3)*(o_y_eq - y3) + (o_z_eq - z3)*(o_z_eq - z3)) + (o_z*(o_z_eq - z3))/sqrt((o_x_eq - x3)*(o_x_eq - x3) + (o_y_eq - y3)*(o_y_eq - y3) + (o_z_eq - z3)*(o_z_eq - z3)) - d3 + sqrt((o_x_eq - x3)*(o_x_eq - x3) + (o_y_eq -  y3)*(o_y_eq - y3) + (o_z_eq - z3)*(o_z_eq - z3));
+      Y_4 = (o_x*(o_x_eq - x4))/sqrt((o_x_eq - x4)*(o_x_eq - x4) + (o_y_eq - y4)*(o_y_eq - y4) + (o_z_eq - z4)*(o_z_eq - z4)) + (o_y*(o_y_eq - y4))/sqrt((o_x_eq - x4)*(o_x_eq - x4) + (o_y_eq - y4)*(o_y_eq - y4) + (o_z_eq - z4)*(o_z_eq - z4)) + (o_z*(o_z_eq - z4))/sqrt((o_x_eq - x4)*(o_x_eq - x4) + (o_y_eq - y4)*(o_y_eq - y4) + (o_z_eq - z4)*(o_z_eq - z4)) - d4 + sqrt((o_x_eq - x4)*(o_x_eq - x4) + (o_y_eq -  y4)*(o_y_eq - y4) + (o_z_eq - z4)*(o_z_eq - z4));
+      Y_5 = (o_x*(o_x_eq - x5))/sqrt((o_x_eq - x5)*(o_x_eq - x5) + (o_y_eq - y5)*(o_y_eq - y5) + (o_z_eq - z5)*(o_z_eq - z5)) + (o_y*(o_y_eq - y5))/sqrt((o_x_eq - x5)*(o_x_eq - x5) + (o_y_eq - y5)*(o_y_eq - y5) + (o_z_eq - z5)*(o_z_eq - z5)) + (o_z*(o_z_eq - z5))/sqrt((o_x_eq - x5)*(o_x_eq - x5) + (o_y_eq - y5)*(o_y_eq - y5) + (o_z_eq - z5)*(o_z_eq - z5)) - d5 + sqrt((o_x_eq - x5)*(o_x_eq - x5) + (o_y_eq -  y5)*(o_y_eq - y5) + (o_z_eq - z5)*(o_z_eq - z5));
+      Y_6 = (o_x*(o_x_eq - x6))/sqrt((o_x_eq - x6)*(o_x_eq - x6) + (o_y_eq - y6)*(o_y_eq - y6) + (o_z_eq - z6)*(o_z_eq - z6)) + (o_y*(o_y_eq - y6))/sqrt((o_x_eq - x6)*(o_x_eq - x6) + (o_y_eq - y6)*(o_y_eq - y6) + (o_z_eq - z6)*(o_z_eq - z6)) + (o_z*(o_z_eq - z6))/sqrt((o_x_eq - x6)*(o_x_eq - x6) + (o_y_eq - y6)*(o_y_eq - y6) + (o_z_eq - z6)*(o_z_eq - z6)) - d6 + sqrt((o_x_eq - x6)*(o_x_eq - x6) + (o_y_eq -  y6)*(o_y_eq - y6) + (o_z_eq - z6)*(o_z_eq - z6));
+      Y_7 = (o_x*(o_x_eq - x7))/sqrt((o_x_eq - x7)*(o_x_eq - x7) + (o_y_eq - y7)*(o_y_eq - y7) + (o_z_eq - z7)*(o_z_eq - z7)) + (o_y*(o_y_eq - y7))/sqrt((o_x_eq - x7)*(o_x_eq - x7) + (o_y_eq - y7)*(o_y_eq - y7) + (o_z_eq - z7)*(o_z_eq - z7)) + (o_z*(o_z_eq - z7))/sqrt((o_x_eq - x7)*(o_x_eq - x7) + (o_y_eq - y7)*(o_y_eq - y7) + (o_z_eq - z7)*(o_z_eq - z7)) - d7 + sqrt((o_x_eq - x7)*(o_x_eq - x7) + (o_y_eq -  y7)*(o_y_eq - y7) + (o_z_eq - z7)*(o_z_eq - z7));
+      Y_8 = -k_flow * w_y +(k_flow * v_x)/o_z_eq - n_x;
+      Y_9 = k_flow * w_x +(k_flow * v_y)/o_z_eq - n_y;
+      Y_10 = o_z - r;
 
-      
+
       // Update estimates
       // FIXME: your code goes here
-      o_x += dt * v_x;
-      o_y += dt * v_y;
-      o_z += (-2.30809f*(o_z - r) + v_z) * dt;
+      o_x += dt*(-0.321942986156017f*Y_0 - 0.360091197357167f*Y_1 - 0.00693842240377889f*Y_10 + 0.318365190026611f*Y_2 + 0.299903852114275f*Y_3 - 0.355665807343492f*Y_4 + 0.442238005738499f*Y_5 + 0.308597523816907f*Y_6 - 0.440053855994591f*Y_7 - 0.0715583737537656f*Y_8 + 5.12544989507709e-5f*Y_9 + v_x);
+      o_y += dt*(0.421591401397973f*Y_0 + 0.350885943671384f*Y_1 + 0.0269048563831952f*Y_10 + 0.423130343013224f*Y_2 - 0.405422944003029f*Y_3 - 0.355951808659831f*Y_4 - 0.237318519656177f*Y_5 + 0.391808269171014f*Y_6 - 0.24175981326639f*Y_7 + 5.17861682512524e-5f*Y_8 - 0.0782767553493582f*Y_9 + v_y);
+      o_z +=dt*(0.00978650662019886f*Y_0 + 0.0166062866884265f*Y_1 - 2.28018924263333f*Y_10 + 0.00989397450977831f*Y_2 + 0.0190825845349324f*Y_3 + 0.0170945088575677f*Y_4 + 0.0144196994197055f*Y_5 + 0.0188045399251483f*Y_6 + 0.0138106476337786f*Y_7 - 1.11146555882439e-5f*Y_8 + 4.07175659351284e-5f*Y_9 + v_z);
       psi += dt * w_z;
-      theta += (-0.016509f*(-n_x + 8.18511f*v_x - 4.09256f*w_y) + w_y) * dt;
-      phi += (w_x + 0.020713f*(-n_y + 8.18511f*v_y + 4.09256f*w_x)) * dt;
-      v_x += (9.81f*theta - 0.270954f*(-n_x + 8.18511f*v_x - 4.09256f*w_y)) * dt;
-      v_y += (-9.81f*phi - 0.296135f*(-n_y + 8.18511f*v_y + 4.09256f*w_x)) * dt;
-      v_z += (a_z - g - 2.5946f*(o_z - r)) * dt;
-
+      theta += dt*(0.000743649050884714f*Y_0 + 0.000832082214889116f*Y_1 + 4.21524245183295e-6f*Y_10 - 0.000737276508755911f*Y_2 - 0.000692565690368467f*Y_3 + 0.000823526337380634f*Y_4 - 0.00102218290302062f*Y_5 - 0.000714565289197534f*Y_6 + 0.00101841351514599f*Y_7 + 0.01645100613059f*Y_8 - 1.21828073969702e-7f*Y_9 + w_y);
+      phi += dt*(0.0011102988440636*Y_0 + 0.000924017496367406*Y_1 + 1.32718313490127e-5*Y_10 + 0.00111634434284999*Y_2 - 0.00106702791703278*Y_3 - 0.000938737703011303*Y_4 - 0.00062368612223573*Y_5 + 0.00103399380969206*Y_6 - 0.000638144033820692*Y_7 + 1.3183332132583e-7*Y_8 - 0.0206557025088524*Y_9 + w_x);
+      v_x += dt*(-0.0157809532951908f*Y_0 - 0.0176554807788392f*Y_1 - 0.000178319846793862f*Y_10 + 0.0156333237437844f*Y_2 + 0.0146982091913017f*Y_3 - 0.0174629114240703f*Y_4 + 0.021687439905286f*Y_5 + 0.015152395274315f*Y_6 - 0.0215988910728946f*Y_7 - 0.269089559817413f*Y_8 + 2.79600027359229e-6f*Y_9 + g*theta);
+      v_y += dt*(0.0217049934206139f*Y_0 + 0.0180637216418776f*Y_1 + 0.000686014553786233f*Y_10 + 0.0218100340380711f*Y_2 - 0.020864233505667f*Y_3 - 0.0183430854593641f*Y_4 - 0.0122013771782201f*Y_5 + 0.0201990669214066f*Y_6 - 0.0124657913716817f*Y_7 + 2.93619610321487e-6f*Y_8 - 0.29435501592153f*Y_9 - g*phi);
+      v_z += dt*(0.0112727231781869f*Y_0 + 0.0189425160283223f*Y_1 - 2.57345089101819f*Y_10 + 0.0113181546686818f*Y_2 + 0.0213193506325072f*Y_3 + 0.0191761230779908f*Y_4 + 0.0161150786052919f*Y_5 + 0.0213619095276965f*Y_6 + 0.0155311781876625f*Y_7 - 1.41496323216679e-5f*Y_8 + 5.26120758410498e-5f*Y_9 + a_z - g);
+      
     } else {
       o_x = state->position.x;
       o_y = state->position.y;
@@ -333,11 +356,10 @@ void controllerAE483(control_t *control,
     } else {
       // Otherwise, motor power commands should be
       // chosen by the controller
-
-      tau_x = 0.00141421f * (o_y - o_y_des) -0.00555862f * phi + 0.00145006f * v_y -0.00108379f * w_x;
-      tau_y = -0.00141421f * (o_x - o_x_des) -0.00461078f * theta -0.00135255f * v_x -0.00079774f * w_y;
-      tau_z = -0.00100000f * psi -0.00074738f * w_z;
-      f_z = -0.31622777f * (o_z - o_z_des) -0.17261477f * v_z + 0.30705300f;
+      tau_x = 0.00070711f * (o_y - o_y_des) -0.00539130f * phi + 0.00133312f * v_y -0.00108137f * w_x;
+      tau_y = -0.00070711f * (o_x - o_x_des) -0.00537977f * theta -0.00133250f * v_x -0.00107664f * w_y;
+      tau_z = -0.00100000f * psi -0.00102887f * w_z;
+      f_z = -0.31622777f * (o_z - o_z_des) -0.17838082f * v_z + 0.33844500f;
       
       // FIXMEs
       m_1 = limitUint16( -4144218.8f * tau_x -4144218.8f * tau_y -56818181.8f * tau_z + 131578.9f * f_z );
@@ -421,4 +443,3 @@ PARAM_GROUP_START(ae483par)
 PARAM_ADD(PARAM_UINT8,     use_observer,            &use_observer)
 PARAM_ADD(PARAM_UINT8,     reset_observer,          &reset_observer)
 PARAM_GROUP_STOP(ae483par)
-
