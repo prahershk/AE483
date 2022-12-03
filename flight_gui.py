@@ -225,6 +225,8 @@ if __name__ == '__main__':
     # Leave time at the start to initialize
     client.stop(1.0)
     
+    z_constant = 0.5
+    
     with open('test_data.csv', newline='') as csvfile:
         data = list(csv.reader(csvfile))
 
@@ -238,10 +240,19 @@ if __name__ == '__main__':
     if pattern == 'Square Pattern Single-Unit':
         x_square = [0,0,x_lim,x_lim,x_lim/4,x_lim/4,3*x_lim/4,3*x_lim/4,x_lim/2,x_lim/2]
         y_square = [0,y_lim,y_lim,0,0,3*y_lim/4,3*y_lim/4,y_lim/4,y_lim/4,y_lim/2]
-        z_constant = np.zeros(len(x_square))+0.5
+        z_square = np.zeros(len(x_square))+z_constant
     
-    #while i < len(x_square):
-     #   client.move_smooth([])
+        client.move(0.0, 0.0, z_constant/3, 0.0, 1.0)
+        
+        i = 0
+        while i < len(x_square):
+            client.move_smooth([x_square[i],y_square[i],z_square[i]], [x_square[i+1],y_square[i+1],z_square[i+1]], 0.0, 0.2)
+            i = i+1
+        
+        
+        
+    client.move(0.0, 0.0, z_constant/3, 0.0, 1.0)
+        
     
     
     
