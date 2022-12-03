@@ -18,8 +18,7 @@ file_list_column = [
             values=[
                 'Square Pattern Single-Unit',
                 'Parallel Single-Unit Spiral',
-                'Sector Pattern Single-Unit',
-                'Negativo'
+                'Sector Pattern Single-Unit'
             ],
             enable_events=True,
             size=(40,20),
