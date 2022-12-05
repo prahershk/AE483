@@ -9,7 +9,7 @@ from cflib.crazyflie.log import LogConfig
 
 # Specify the uri of the drone to which we want to connect (if your radio
 # channel is X, the uri should be 'radio://0/X/2M/E7E7E7E7E7')
-uri = 'radio://0/80/2M/E7E7E7E7E7' # <-- FIXME
+uri = 'radio://0/37/2M/E7E7E7E7E7' # <-- FIXME
 
 # Specify the variables we want to log (all at 100 Hz)
 variables = [
@@ -225,7 +225,7 @@ if __name__ == '__main__':
     # Leave time at the start to initialize
     client.stop(1.0)
     
-    z_constant = 0.5
+    z_constant = 0.4
     
     with open('test_data.csv', newline='') as csvfile:
         data = list(csv.reader(csvfile))
@@ -236,8 +236,9 @@ if __name__ == '__main__':
     x_lim = float(data[1])
     y_lim = float(data[2])
     pattern = data[3]
-    
-    if pattern == 'Square Pattern Single-Unit':
+ 
+    if pattern == "['Square Pattern Single-Unit']":
+        print("Starting Square Spiral")
         x_square = [0,0,x_lim,x_lim,x_lim/4,x_lim/4,3*x_lim/4,3*x_lim/4,x_lim/2,x_lim/2]
         y_square = [0,y_lim,y_lim,0,0,3*y_lim/4,3*y_lim/4,y_lim/4,y_lim/4,y_lim/2]
         z_square = np.zeros(len(x_square))+z_constant
@@ -246,29 +247,109 @@ if __name__ == '__main__':
         
         i = 0
         while i < len(x_square):
-            client.move_smooth([x_square[i],y_square[i],z_square[i]], [x_square[i+1],y_square[i+1],z_square[i+1]], 0.0, 0.2)
+            if i == len(x_square)-2:
+                client.move(x_square[i], y_square[i], z_square[i]/3, 0.0, 1.0)
+                break
+
+            if i == 0:
+                client.move_smooth([0.0, 0.0, z_constant/3], [x_square[i], y_square[i], z_square[i]], 0.0, 0.2)
+
+            client.move_smooth([x_square[i], y_square[i], z_square[i]], [x_square[i+1], y_square[i+1], z_square[i+1]], 0.0, 0.2)
+            client.move(x_square[i+1], y_square[i+1], z_square[i+1], 0.0, 1.0)
             i = i+1
         
         
+    if pattern == "['Sector Pattern Single-Unit']":
+        x_center = x_lim/2
+        y_center = y_lim/2
+        h = x_lim/2
+        k = y_lim/2
+
+        x_sector = np.array([0-x_center,h*np.cos(4*np.pi/3),h*np.cos(np.pi/3),h*np.cos(0),h*np.cos(np.pi),h*np.cos(2*np.pi/3),h*np.cos(5*np.pi/3),h*np.cos(4*np.pi/3)])
+        x_sector = x_sector+x_center
+
+        y_sector = np.array([0-y_center,k*np.sin(4*np.pi/3),k*np.sin(np.pi/3),k*np.sin(0),k*np.sin(np.pi),k*np.sin(2*np.pi/3),k*np.sin(5*np.pi/3),k*np.sin(4*np.pi/3)])
+        y_sector = y_sector+y_center
+
+        z_sector = np.zeros(len(x_sector))+z_constant
+
+        client.move(0.0, 0.0, z_constant/3, 0.0, 1.0)
+        print("Starting Radioactive Pattern")
+        i = 0
+        while i < len(x_sector):
+            if i == len(x_sector)-2:
+                client.move(x_sector[i], y_sector[i], z_sector[i]/3, 0.0, 1.0)
+                break
+
+            if i == 0:
+                client.move_smooth([0.0, 0.0, z_constant/3], [x_sector[i], y_sector[i], z_sector[i]], 0.0, 0.2)
+
+            client.move_smooth([x_sector[i], y_sector[i], z_sector[i]], [x_sector[i+1], y_sector[i+1], z_sector[i+1]], 0.0, 0.2)
+            client.move(x_sector[i+1], y_sector[i+1], z_sector[i+1], 0.0, 1.0)
+            i = i+1
+
+    if pattern == "['Parallel Single-Unit Spiral']":
+        x_center = x_lim/2
+        y_center = y_lim/2
+        count = 20
+        h = np.linspace(x_lim/2,0,count)
+        k = np.linspace(y_lim/2,0,count)
+
+        t = np.linspace(3*np.pi/2, 11*np.pi/2,count)
         
-    client.move(0.0, 0.0, z_constant/3, 0.0, 1.0)
+        x_spiral = []
+        y_spiral = []
         
-    
-    
-    
+        i = 0
+        while i < len(t):
+            x_spiral.append(h[i]*np.cos(t[i]))
+            y_spiral.append(k[i]*np.sin(t[i]))
+            i = i+1
+        
+        x_spiral = np.array([x_spiral])+x_center
+        y_spiral = np.array([y_spiral])+y_center
+        z_spiral = np.zeros(len(x_spiral))+z_constant
+
+        client.move(0.0, 0.0, z_constant/3, 0.0, 1.0)
+
+        print("Starting Spiral")
+        i = 0
+        while i < len(x_spiral):
+            if i == len(x_spiral)-2:
+                client.move(x_spiral[i], y_spiral[i], z_spiral[i]/3, 0.0, 1.0)
+                break
+
+            if i == 0:
+                client.move_smooth([0.0, 0.0, z_constant/3], [x_spiral[i], y_spiral[i], z_spiral[i]], 0.0, 0.2)
+
+            client.move_smooth([x_spiral[i], y_spiral[i], z_spiral[i]], [x_spiral[i+1], y_spiral[i+1], z_spiral[i+1]], 0.0, 0.2)
+            client.move(x_spiral[i+1], y_spiral[i+1], z_spiral[i+1], 0.0, 0.2)
+            i = i+1        
+
+        
+       
     """
-    #
-    # FIXME: Insert move commands here...
-    #
-    # For hover tests
-    # - take off and hover (with zero yaw)
-    client.move(0.0, 0.0, 0.15, 0.0, 1.0)
-    client.move_smooth([0.0, 0.0, 0.15], [0.0, 0.0, 0.5], 0.0, 0.2)
-    # - keep hovering (with zero yaw)
-    client.move(0.0, 0.0, 0.5, 0.0, 11.0)
-    # - go back to hover (with zero yaw) and prepare to land
-    client.move_smooth([0.0, 0.0, 0.5], [0.0, 0.0, 0.15], 0.0, 0.2)
-    client.move(0.0, 0.0, 0.15, 0.0, 1.0)
+    print(pattern)
+    if pattern == "['Square Pattern Single-Unit']":
+        # For move tests
+        # - take off and hover (with zero yaw)
+        client.move(0.0, 0.0, 0.15, 0.0, 1.0)
+        client.move_smooth([0.0, 0.0, 0.15], [0.0, 0.0, 0.5], 0.0, 0.2)
+        client.move(0.0, 0.0, 0.5, 0.0, 1.0)
+        # - fly in a square five times (with a pause at each corner)
+        num_squares = 1
+        for i in range(num_squares):
+            client.move_smooth([0.0, 0.0, 0.5], [0.5, 0.0, 0.5], 0.0, 0.2)
+            client.move(0.5, 0.0, 0.5, 0.0, 1.0)
+            client.move_smooth([0.5, 0.0, 0.5], [0.5, 0.5, 0.5], 0.0, 0.2)
+            client.move(0.5, 0.5, 0.5, 0.0, 1.0)
+            client.move_smooth([0.5, 0.5, 0.5], [0.0, 0.5, 0.5], 0.0, 0.2)
+            client.move(0.0, 0.5, 0.5, 0.0, 1.0)
+            client.move_smooth([0.0, 0.5, 0.5], [0.0, 0.0, 0.5], 0.0, 0.2)
+            client.move(0.0, 0.0, 0.5, 0.0, 1.0)
+        # - go back to hover (with zero yaw) and prepare to land
+        client.move_smooth([0.0, 0.0, 0.5], [0.0, 0.0, 0.15], 0.0, 0.2)
+        client.move(0.0, 0.0, 0.15, 0.0, 1.0)
     """
     # Land
     client.stop(1.0)
