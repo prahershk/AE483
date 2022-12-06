@@ -111,7 +111,7 @@ while True:
         header = ['Speed', 'X Dimension', 'Y Dimension', 'Flight Pattern']
         data = [float(values['-SPEED-']), float(values['-XLIM-']), float(values['-YLIM-']), values['-FILE LIST-']]
 
-        with open('test_data', 'w', encoding='UTF8', newline='') as f:
+        with open('test_data.csv', 'w', encoding='UTF8', newline='') as f:
             writer = csv.writer(f)
             writer.writerow(header)
             writer.writerow(data)
