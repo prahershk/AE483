@@ -1,4 +1,5 @@
 import numpy as np
+import csv
 import json
 import matplotlib.pyplot as plt
 from scipy.interpolate import interp1d
@@ -57,7 +58,33 @@ data = load_hardware_data('hardware_data.json', only_in_flight=False)
 o_x = data['ae483log.o_x']
 o_y = data['ae483log.o_y']
 
+with open('preflight_data.csv', newline='') as csvfile:
+    data = list(csv.reader(csvfile))
+
+data = data[1]
+
+x_lim = float(data[1])
+y_lim = float(data[2])
+
+expected_x = np.block([np.zeros(10),
+                       np.linspace(0, x_lim, 10),
+                       np.ones(10),
+                       np.flip(np.linspace(0.25 * x_lim, x_lim, 10)),
+                       0.25 * x_lim * np.ones(10),
+                       np.linspace(0.25 * x_lim, 0.75 * x_lim, 10),
+                       0.75 * x_lim * np.ones(10),
+                       np.flip(np.linspace(0.5 * x_lim, 0.75 * x_lim, 10))])
+expected_y = np.block([np.linspace(0, y_lim, 10),
+                       np.ones(10),
+                       np.flip(np.linspace(0, y_lim, 10)),
+                       np.zeros(10),
+                       np.linspace(0, 0.75 * y_lim, 10),
+                       0.75 * y_lim * np.ones(10),
+                       np.flip(np.linspace(0.25 * y_lim, 0.75 * y_lim, 10)),
+                       0.25 * y_lim * np.ones(10)])
+
 plt.plot(o_x, o_y)
+plt.plot(expected_x, expected_y, '--')
 plt.xlabel('$x$-Position (m)')
 plt.ylabel('$y$-Position (m)')
 plt.savefig('results.png')
