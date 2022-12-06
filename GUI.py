@@ -52,7 +52,7 @@ image_viewer_column = [
     ],
     [
         sg.Button('Fly Drone'),
-        sg.Text(size=(40, 1), key="-FLY-")
+        sg.Text(size=(40,1), key="-FLY-")
     ],
     [
         sg.Button('Show Actual Flight'),
