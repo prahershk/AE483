@@ -77,7 +77,7 @@ while True:
     if event == 'Display':
         try:
             if values['-FILE LIST-'] == ['Square Pattern Single-Unit']:
-                filename = '/Users/zujjainwala/Desktop/Square.png'
+                filename = '/Users/tcyok/Desktop/Square.png'
             elif values['-FILE LIST-'] == ['Parallel Single-Unit Spiral']:
                 filename = '/Users/zujjainwala/Desktop/Spiral.png'
             elif values['-FILE LIST-'] == ['Sector Pattern Single-Unit']:
