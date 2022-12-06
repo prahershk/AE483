@@ -77,11 +77,11 @@ while True:
     if event == 'Display':
         try:
             if values['-FILE LIST-'] == ['Square Pattern Single-Unit']:
-                filename = '/Users/tcyok/Desktop/Square.png'
+                filename = 'Square.png'
             elif values['-FILE LIST-'] == ['Parallel Single-Unit Spiral']:
-                filename = '/Users/zujjainwala/Desktop/Spiral.png'
+                filename = 'Spiral.png'
             elif values['-FILE LIST-'] == ['Sector Pattern Single-Unit']:
-                filename = '/Users/zujjainwala/Desktop/Sector.png'
+                filename = 'Sector.png'
 
             window["-PATH-"].update(values['-FILE LIST-'])
             window['-IMAGE-'].update(filename=filename)
@@ -111,7 +111,7 @@ while True:
         header = ['Speed', 'X Dimension', 'Y Dimension', 'Flight Pattern']
         data = [float(values['-SPEED-']), float(values['-XLIM-']), float(values['-YLIM-']), values['-FILE LIST-']]
 
-        with open('test_data.csv', 'w', encoding='UTF8', newline='') as f:
+        with open('preflight_data.csv', 'w', encoding='UTF8', newline='') as f:
             writer = csv.writer(f)
             writer.writerow(header)
             writer.writerow(data)
@@ -119,9 +119,9 @@ while True:
         window["-TOUT-"].update('SENT')
 
     if event == 'Fly Drone':
-        pass
-        # file = 'testFile.py'
-        # with open(file) as infile:
-        #     exec(infile.read())
+        # pass
+        file = 'flight_gui.py'
+        with open(file) as infile:
+            exec(infile.read())
 
 window.close()
