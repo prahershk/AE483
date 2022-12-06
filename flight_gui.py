@@ -227,7 +227,7 @@ if __name__ == '__main__':
     
     z_constant = 0.4
     
-    with open('test_data.csv', newline='') as csvfile:
+    with open('preflight_data.csv', newline='') as csvfile:
         data = list(csv.reader(csvfile))
 
     data = data[1]

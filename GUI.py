@@ -53,6 +53,10 @@ image_viewer_column = [
     [
         sg.Button('Fly Drone'),
         sg.Text(size=(40, 1), key="-FLY-")
+    ],
+    [
+        sg.Button('Show Actual Flight'),
+        sg.Text(size=(40,1), key='-SHOW-')
     ]
 ]
 
@@ -119,8 +123,12 @@ while True:
         window["-TOUT-"].update('SENT')
 
     if event == 'Fly Drone':
-        # pass
         file = 'flight_gui.py'
+        with open(file) as infile:
+            exec(infile.read())
+
+    if event == 'Show Actual Flight':
+        file = 'generate_results.py'
         with open(file) as infile:
             exec(infile.read())
 
