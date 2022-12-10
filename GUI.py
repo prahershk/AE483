@@ -52,7 +52,7 @@ image_viewer_column = [
     ],
     [
         sg.Button('Fly Drone'),
-        sg.Text(size=(40, 1), key="-FLY-")
+        sg.Text(size=(40,1), key="-FLY-")
     ],
     [
         sg.Button('Show Actual Flight'),
@@ -128,8 +128,11 @@ while True:
             exec(infile.read())
 
     if event == 'Show Actual Flight':
-        file = 'generate_results.py'
-        with open(file) as infile:
+        flight_file = 'generate_results.py'
+        with open(flight_file) as infile:
             exec(infile.read())
+
+        filename = 'results.png'
+        window['-IMAGE-'].update(filename=filename)
 
 window.close()
