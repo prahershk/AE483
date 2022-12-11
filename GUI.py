@@ -3,12 +3,17 @@ import csv
 import matplotlib.pyplot as plt
 import random
 
-# Theme
+### This python file creates the Graphical User Interface (GUI) and allows
+### the user to pick a pre-determined flight path for the drone to fly.
+### Following this, the user can display, pick drone speed and x&y limits
+### send to drone. The final flight path is relayed back to the display.
+
+# Randomly picks a theme for the GUI
 theme_name_list = sg.theme_list()
 random_theme = random.choice(theme_name_list)
 sg.theme(random_theme)
 
-# Left side of GUI to display the list of Search Patterns
+# Left side of GUI to display the list of available Search Patterns
 file_list_column = [
     [
         sg.Text("Desired Flight Plan")
@@ -92,10 +97,8 @@ while True:
         except:
             window["-PATH-"].update("That shit don't exist!!")
 
+    # Takes data from the input and creates CSV file
     if event == 'Send to Drone':
-        # Takes data from the input and creates CSV file
-        # Only occurs when button is pressed
-
         # Limit corrections if over/under bounds
         lower = 0.1
         upper = 2.0
@@ -122,11 +125,13 @@ while True:
 
         window["-TOUT-"].update('SENT')
 
+    # Runs the flight_gui.py file that will fly the drone
     if event == 'Fly Drone':
         file = 'flight_gui.py'
         with open(file) as infile:
             exec(infile.read())
 
+    # Once flight is done, the actual flight path can be viewed
     if event == 'Show Actual Flight':
         flight_file = 'generate_results.py'
         with open(flight_file) as infile:

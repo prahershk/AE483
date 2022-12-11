@@ -9,7 +9,7 @@ from cflib.crazyflie.log import LogConfig
 
 # Specify the uri of the drone to which we want to connect (if your radio
 # channel is X, the uri should be 'radio://0/X/2M/E7E7E7E7E7')
-uri = 'radio://0/37/2M/E7E7E7E7E7' # <-- FIXME
+uri = 'radio://0/30/2M/E7E7E7E7E7'
 
 # Specify the variables we want to log (all at 100 Hz)
 variables = [
@@ -237,8 +237,9 @@ if __name__ == '__main__':
     y_lim = float(data[2])
     pattern = data[3]
  
+    # If the data sent from the GUI requests Square Pattern
     if pattern == "['Square Pattern Single-Unit']":
-        print("Starting Square Spiral")
+        print("Starting Square Search Pattern")
         x_square = [0,0,x_lim,x_lim,x_lim/4,x_lim/4,3*x_lim/4,3*x_lim/4,x_lim/2,x_lim/2]
         y_square = [0,y_lim,y_lim,0,0,3*y_lim/4,3*y_lim/4,y_lim/4,y_lim/4,y_lim/2]
         z_square = np.zeros(len(x_square))+z_constant
@@ -258,7 +259,7 @@ if __name__ == '__main__':
             client.move(x_square[i+1], y_square[i+1], z_square[i+1], 0.0, 1.0)
             i = i+1
         
-        
+    # If the data sent from the GUI requests Sector Pattern
     if pattern == "['Sector Pattern Single-Unit']":
         x_center = x_lim/2
         y_center = y_lim/2
@@ -274,7 +275,7 @@ if __name__ == '__main__':
         z_sector = np.zeros(len(x_sector))+z_constant
 
         client.move(0.0, 0.0, z_constant/3, 0.0, 1.0)
-        print("Starting Radioactive Pattern")
+        print("Starting Radioactive Search Pattern")
         i = 0
         while i < len(x_sector):
             if i == len(x_sector)-2:
@@ -288,6 +289,7 @@ if __name__ == '__main__':
             client.move(x_sector[i+1], y_sector[i+1], z_sector[i+1], 0.0, 1.0)
             i = i+1
 
+    # If the data sent from the GUI requests Parallel Pattern
     if pattern == "['Parallel Single-Unit Spiral']":
         x_center = x_lim/2
         y_center = y_lim/2
@@ -312,7 +314,7 @@ if __name__ == '__main__':
 
         client.move(0.0, 0.0, z_constant/3, 0.0, 1.0)
 
-        print("Starting Spiral")
+        print("Starting Spiral Search Pattern")
         i = 0
         while i < len(x_spiral):
             if i == len(x_spiral)-2:
@@ -324,9 +326,7 @@ if __name__ == '__main__':
 
             client.move_smooth([x_spiral[i], y_spiral[i], z_spiral[i]], [x_spiral[i+1], y_spiral[i+1], z_spiral[i+1]], 0.0, 0.2)
             client.move(x_spiral[i+1], y_spiral[i+1], z_spiral[i+1], 0.0, 0.2)
-            i = i+1        
-
-        
+            i = i+1
        
     """
     print(pattern)
@@ -351,6 +351,7 @@ if __name__ == '__main__':
         client.move_smooth([0.0, 0.0, 0.5], [0.0, 0.0, 0.15], 0.0, 0.2)
         client.move(0.0, 0.0, 0.15, 0.0, 1.0)
     """
+
     # Land
     client.stop(1.0)
 
