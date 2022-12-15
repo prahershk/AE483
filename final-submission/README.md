@@ -19,3 +19,9 @@ Flight data `.json` files are located in the `\flight-test-data` folder.
 
 ## Graphs
 Graphs used in the report are located in the `\graphs` folder.
+
+## Pattern Photos
+The following files are the search pattern photos that are used in the GUI:
+- Square.png
+- Sector.png
+- Sector.png
