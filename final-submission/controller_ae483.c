@@ -99,7 +99,7 @@ static float g = 9.81f;
 static float dt = 0.002f;
 static float o_x_eq = 0.0f;
 static float o_y_eq = 0.0f;
-static float o_z_eq = 0.5f; // FIXME: replace with your choice of equilibrium height
+static float o_z_eq = 0.5f;
 
 // Measurement errors
 static float Y_0 = 0.0f;
@@ -305,12 +305,27 @@ void controllerAE483(control_t *control,
 
     // State estimates
     if (use_observer) {
-    
+      // Uncommment code below to conduct offline tests
+      // using state estimate update method from Lab 09.
+      // Make sure y_err and new state estimate update
+      // method is also commented out.
+
+      // o_x += dt * v_x;
+      // o_y += dt * v_y;
+      // o_z += (-2.30809f*(o_z - r) + v_z) * dt;
+      // psi += dt * w_z;
+      // theta += (-0.016509f*(-n_x + 8.18511f*v_x - 4.09256f*w_y) + w_y) * dt;
+      // phi += (w_x + 0.020713f*(-n_y + 8.18511f*v_y + 4.09256f*w_x)) * dt;
+      // v_x += (9.81f*theta - 0.270954f*(-n_x + 8.18511f*v_x - 4.09256f*w_y)) * dt;
+      // v_y += (-9.81f*phi - 0.296135f*(-n_y + 8.18511f*v_y + 4.09256f*w_x)) * dt;
+      // v_z += (a_z - g - 2.5946f*(o_z - r)) * dt;
+
+      // Use new state estimate update method
       // Compute each element of:
       // 
-      //   C x + D u - y
+      //   Y = C x + D u - y
       // 
-      // FIXME: your code goes here
+      // Pulled from linearization.ipynb
       Y_0 = (o_x*(o_x_eq - x0))/sqrtf((o_x_eq - x0)*(o_x_eq - x0) + (o_y_eq - y_0)*(o_y_eq - y_0) + (o_z_eq - z0)*(o_z_eq - z0)) + (o_y*(o_y_eq - y_0))/sqrtf((o_x_eq - x0)*(o_x_eq - x0) + (o_y_eq - y_0)*(o_y_eq - y_0) + (o_z_eq - z0)*(o_z_eq - z0)) + (o_z*(o_z_eq - z0))/sqrtf((o_x_eq - x0)*(o_x_eq - x0) + (o_y_eq - y_0)*(o_y_eq - y_0) + (o_z_eq - z0)*(o_z_eq - z0)) - d0 + sqrtf((o_x_eq - x0)*(o_x_eq - x0) + (o_y_eq -  y_0)*(o_y_eq - y_0) + (o_z_eq - z0)*(o_z_eq - z0));
       Y_1 = (o_x*(o_x_eq - x1))/sqrtf((o_x_eq - x1)*(o_x_eq - x1) + (o_y_eq - y_1)*(o_y_eq - y_1) + (o_z_eq - z1)*(o_z_eq - z1)) + (o_y*(o_y_eq - y_1))/sqrtf((o_x_eq - x1)*(o_x_eq - x1) + (o_y_eq - y_1)*(o_y_eq - y_1) + (o_z_eq - z1)*(o_z_eq - z1)) + (o_z*(o_z_eq - z1))/sqrtf((o_x_eq - x1)*(o_x_eq - x1) + (o_y_eq - y_1)*(o_y_eq - y_1) + (o_z_eq - z1)*(o_z_eq - z1)) - d1 + sqrtf((o_x_eq - x1)*(o_x_eq - x1) + (o_y_eq -  y_1)*(o_y_eq - y_1) + (o_z_eq - z1)*(o_z_eq - z1));
       Y_2 = (o_x*(o_x_eq - x2))/sqrtf((o_x_eq - x2)*(o_x_eq - x2) + (o_y_eq - y2)*(o_y_eq - y2) + (o_z_eq - z2)*(o_z_eq - z2)) + (o_y*(o_y_eq - y2))/sqrtf((o_x_eq - x2)*(o_x_eq - x2) + (o_y_eq - y2)*(o_y_eq - y2) + (o_z_eq - z2)*(o_z_eq - z2)) + (o_z*(o_z_eq - z2))/sqrtf((o_x_eq - x2)*(o_x_eq - x2) + (o_y_eq - y2)*(o_y_eq - y2) + (o_z_eq - z2)*(o_z_eq - z2)) - d2 + sqrtf((o_x_eq - x2)*(o_x_eq - x2) + (o_y_eq -  y2)*(o_y_eq - y2) + (o_z_eq - z2)*(o_z_eq - z2));
@@ -325,7 +340,7 @@ void controllerAE483(control_t *control,
 
 
       // Update estimates
-      // FIXME: your code goes here
+      // Pulled from linearization.ipynb
       o_x += dt*(-0.321942986156017f*Y_0 - 0.360091197357167f*Y_1 - 0.00693842240377889f*Y_10 + 0.318365190026611f*Y_2 + 0.299903852114275f*Y_3 - 0.355665807343492f*Y_4 + 0.442238005738499f*Y_5 + 0.308597523816907f*Y_6 - 0.440053855994591f*Y_7 - 0.0715583737537656f*Y_8 + 5.12544989507709e-5f*Y_9 + v_x);
       o_y += dt*(0.421591401397973f*Y_0 + 0.350885943671384f*Y_1 + 0.0269048563831952f*Y_10 + 0.423130343013224f*Y_2 - 0.405422944003029f*Y_3 - 0.355951808659831f*Y_4 - 0.237318519656177f*Y_5 + 0.391808269171014f*Y_6 - 0.24175981326639f*Y_7 + 5.17861682512524e-5f*Y_8 - 0.0782767553493582f*Y_9 + v_y);
       o_z +=dt*(0.00978650662019886f*Y_0 + 0.0166062866884265f*Y_1 - 2.28018924263333f*Y_10 + 0.00989397450977831f*Y_2 + 0.0190825845349324f*Y_3 + 0.0170945088575677f*Y_4 + 0.0144196994197055f*Y_5 + 0.0188045399251483f*Y_6 + 0.0138106476337786f*Y_7 - 1.11146555882439e-5f*Y_8 + 4.07175659351284e-5f*Y_9 + v_z);
@@ -335,7 +350,7 @@ void controllerAE483(control_t *control,
       v_x += dt*(-0.0157809532951908f*Y_0 - 0.0176554807788392f*Y_1 - 0.000178319846793862f*Y_10 + 0.0156333237437844f*Y_2 + 0.0146982091913017f*Y_3 - 0.0174629114240703f*Y_4 + 0.021687439905286f*Y_5 + 0.015152395274315f*Y_6 - 0.0215988910728946f*Y_7 - 0.269089559817413f*Y_8 + 2.79600027359229e-6f*Y_9 + g*theta);
       v_y += dt*(0.0217049934206139f*Y_0 + 0.0180637216418776f*Y_1 + 0.000686014553786233f*Y_10 + 0.0218100340380711f*Y_2 - 0.020864233505667f*Y_3 - 0.0183430854593641f*Y_4 - 0.0122013771782201f*Y_5 + 0.0201990669214066f*Y_6 - 0.0124657913716817f*Y_7 + 2.93619610321487e-6f*Y_8 - 0.29435501592153f*Y_9 - g*phi);
       v_z += dt*(0.0112727231781869f*Y_0 + 0.0189425160283223f*Y_1 - 2.57345089101819f*Y_10 + 0.0113181546686818f*Y_2 + 0.0213193506325072f*Y_3 + 0.0191761230779908f*Y_4 + 0.0161150786052919f*Y_5 + 0.0213619095276965f*Y_6 + 0.0155311781876625f*Y_7 - 1.41496323216679e-5f*Y_8 + 5.26120758410498e-5f*Y_9 + a_z - g);
-      
+
     } else {
       o_x = state->position.x;
       o_y = state->position.y;
@@ -356,13 +371,13 @@ void controllerAE483(control_t *control,
     } else {
       // Otherwise, motor power commands should be
       // chosen by the controller
-
+      
       tau_x = 0.00141421f * (o_y - o_y_des) -0.00555862f * phi + 0.00145006f * v_y -0.00108379f * w_x;
       tau_y = -0.00141421f * (o_x - o_x_des) -0.00461078f * theta -0.00135255f * v_x -0.00079774f * w_y;
       tau_z = -0.00100000f * psi -0.00074738f * w_z;
       f_z = -0.31622777f * (o_z - o_z_des) -0.17261477f * v_z + 0.30705300f;
       
-      // FIXMEs
+      // Motor power commands
       m_1 = limitUint16( -4144218.8f * tau_x -4144218.8f * tau_y -56818181.8f * tau_z + 131578.9f * f_z );
       m_2 = limitUint16( -4144218.8f * tau_x + 4144218.8f * tau_y + 56818181.8f * tau_z + 131578.9f * f_z );
       m_3 = limitUint16( 4144218.8f * tau_x + 4144218.8f * tau_y -56818181.8f * tau_z + 131578.9f * f_z );
