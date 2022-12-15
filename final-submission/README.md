@@ -14,6 +14,12 @@ When running the GUI.py in the conda environment, please run the following comma
 pip install PySimpleGUI
 ```
 
+## Running the GUI
+Following the install of PySimpleGUI, in order to launch the GUI that will show flight patterns, data parameters, and post-flight images, the following command must be run with the conda environment:
+```
+python GUI.py
+```
+
 ## Pattern Photos
 The following files are the search pattern photos that are used in the GUI:
 - Square.png
